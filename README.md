@@ -3,7 +3,7 @@ You can drive sdhc card in your stm32f407 board, other stm32f4xx boards have no 
 if you want to test other boards, you can edit library and feature:
 
 ```
-stm32fxxx-hal = {version = "xxx", features = ["xxx"]}
+stm32fxxx-hal = { version = "xxx", features = ["xxx"] }
 ```
 
 ## Using the crate
@@ -90,4 +90,11 @@ Card {
 }
 [1, 1, 1, .......]
 [2, 2, 2, .......]
+```
+
+## How to support fat32 filesystem
+
+You can add feature like this. Visit [fat32](https://github.com/play-stm32/fat32) to check out usages for details
+```
+sdio_sdhc = { version = "0.2.0", features = ["filesystem"] }
 ```

@@ -18,6 +18,7 @@ pub enum CmdError {
     CTIMEOUT,
     DCRCFAIL,
     CCRCFAIL,
+    NoFindCard
 }
 
 /// define read or write operation
@@ -46,7 +47,7 @@ fn sdio_init() {
     sdio.power.write(|w| unsafe { w.pwrctrl().bits(3) });
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Card {
     pub capacity: u32,
     block_size: u32,
@@ -67,7 +68,7 @@ impl Card {
         let _drop = read_response(ResponseType::ShortResponse)?;
 
         // wait card has power to ready
-        loop {
+        for i in 0..0xFF {
             // send acmd 41 to check sdcard ready state, argument 0x80100000 | 0x40000000, short response
             acmd_send(41, 0, 0x80100000 | 0x40000000, ResponseType::ShortResponse)?;
             let resp = read_response(ResponseType::ShortResponse)?;
@@ -75,6 +76,10 @@ impl Card {
             // check voltage
             if resp.1[0] >> 31 == 1 {
                 break;
+            }
+
+            if i == 0xFF - 1 {
+                return Err(CmdError::NoFindCard);
             }
         }
 
@@ -98,7 +103,7 @@ impl Card {
 
         select_card((rca as u32) << 16)?;
         enable_wide_bus((rca as u32) << 16)?;
-        swich_work_clock();
+        switch_work_clock();
 
         Ok(Card {
             capacity: card_capacity,
@@ -107,6 +112,7 @@ impl Card {
         })
     }
 
+    /// read block
     pub fn read_block(&self, buf: &mut [u8], address: u32) -> Result<(), CmdError> {
         wait_card_programming(self.rca)?;
         set_block_size(self.block_size)?;
@@ -129,6 +135,7 @@ impl Card {
         Ok(())
     }
 
+    /// read multi blocks
     pub fn read_multi_blocks(&self, buf: &mut [u8], address: u32, number_of_blocks: u32) -> Result<(), CmdError> {
         wait_card_programming(self.rca)?;
         set_block_size(self.block_size)?;
@@ -152,6 +159,7 @@ impl Card {
         Ok(())
     }
 
+    /// write block
     pub fn write_block(&self, buf: &[u8], address: u32) -> Result<(), CmdError> {
         wait_card_programming(self.rca)?;
         set_block_size(self.block_size)?;
@@ -174,6 +182,7 @@ impl Card {
         Ok(())
     }
 
+    /// write multi blocks
     pub fn write_multi_blocks(&self, buf: &[u8], address: u32, number_of_blocks: u32) -> Result<(), CmdError> {
         wait_card_programming(self.rca)?;
         set_block_size(self.block_size)?;
@@ -326,8 +335,8 @@ pub fn acmd_send(acmd: u8, cmd_arg: u32, acmd_arg: u32, response_type: ResponseT
     Ok(())
 }
 
-/// swich to work clock (24Mhz)
-fn swich_work_clock() {
+/// switch to work clock (24Mhz)
+fn switch_work_clock() {
     let ptr = unsafe {
         &*stm32::SDIO::ptr()
     };

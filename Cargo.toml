@@ -1,6 +1,6 @@
 [package]
 name = "sdio_sdhc"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["spxg <itsme@spxg.me>"]
 edition = "2018"
 description = "A simple driver to drive sdhc over SDIO, no filesystem, only test stm32f407 board，other stm32f4xx boards have no test"
@@ -8,8 +8,13 @@ keywords = ["sdcard", "sdhc", "embedded", "stm32f407", "SDIO"]
 categories = ["embedded", "no-std"]
 repository = "https://github.com/play-stm32/sdio_sdhc"
 readme = "README.md"
-license = "MIT OR Apache-2.0"
+license = "MIT"
+
+[features]
+default = []
+filesystem = ["fat32"]
 
 [dependencies]
 cortex-m = "0.6"
-stm32f4xx-hal = {version = "0.8", features = ["stm32f407"]}
+stm32f4xx-hal = { version = "0.8", features = ["stm32f407"] }
+fat32 = { version = "0.1", optional = true }

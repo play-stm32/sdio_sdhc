@@ -81,6 +81,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fat32"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dbc041e8fd9b65bd72a72ec184d4d1ec21ef0be77452f2f7092a01d31b98daf9"
+
+[[package]]
 name = "generic-array"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -145,9 +151,10 @@ dependencies = [
 
 [[package]]
 name = "sdio_sdhc"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "cortex-m",
+ "fat32",
  "stm32f4xx-hal",
 ]
 

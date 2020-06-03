@@ -3,7 +3,7 @@
 //! if you want to test other boards, you can edit library and feature:
 //!
 //! ```
-//! stm32fxxx-hal = {version = "xxx", features = ["xxx"]}
+//! stm32fxxx-hal = { version = "xxx", features = ["xxx"] }
 //! ```
 //! first you need to init some GPIO, like this:
 //!
@@ -90,8 +90,18 @@
 //! [1, 1, 1, .......]
 //! [2, 2, 2, .......]
 //! ```
-
-#![cfg_attr(not(test), no_std)]
+//! ## How to support fat32 filesystem
+//!
+//! You can add feature like this. Visit [fat32](https://github.com/play-stm32/fat32) to check out usages for details
+//! ```
+//! sdio_sdhc = { version = "0.2.0", features = ["filesystem"] }
+//! ````
+//!
+#![no_std]
 
 pub mod sdcard;
 pub mod sdio_dma;
+
+// to support filesystem
+#[cfg(feature = "filesystem")]
+pub mod fat32;
