@@ -1,8 +1,8 @@
+use block_device::BlockDevice;
 use crate::sdcard::{CmdError, Card};
-use fat32::base::BasicOperation;
 
-/// impl BasicOperation for card
-impl BasicOperation for Card {
+/// impl BlockDevice for card
+impl BlockDevice for Card {
     type Error = CmdError;
 
     fn read(&self, buf: &mut [u8], address: u32, number_of_blocks: u32) -> Result<(), Self::Error> {
