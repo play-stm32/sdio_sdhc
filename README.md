@@ -96,5 +96,5 @@ Card {
 
 You can add feature like this. Visit [fat32](https://github.com/play-stm32/fat32) to check out usages for details
 ```
-sdio_sdhc = { version = "0.2.0", features = ["filesystem"] }
+sdio_sdhc = { version = "0.2", features = ["filesystem"] }
 ```

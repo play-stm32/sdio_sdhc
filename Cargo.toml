@@ -1,6 +1,6 @@
 [package]
 name = "sdio_sdhc"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["spxg <itsme@spxg.me>"]
 edition = "2018"
 description = "A simple driver to drive sdhc over SDIO, no filesystem, only test stm32f407 board，other stm32f4xx boards have no test"
@@ -22,5 +22,5 @@ version = "0.8"
 features = ["stm32f407"]
 
 [dependencies.block_device]
-version = "0.1"
+version = "=0.1.0"
 optional = true
